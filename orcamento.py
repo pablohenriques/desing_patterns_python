@@ -2,7 +2,7 @@ class Orcamento:
 
     def __init__(self):
         self.__itens = []
-    
+
     @property
     def valor(self):
         total = 0.0
