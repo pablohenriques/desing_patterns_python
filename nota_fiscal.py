@@ -18,7 +18,7 @@ class Item:
 
 class NotaFiscal:
  
-    def __init__(self, razao_social, cnpj, itens, data_de_emissao=date.today(), detalhes=''):
+    def __init__(self, razao_social, cnpj, itens, data_de_emissao=date.today(), detalhes='', observadores = []):
         self.__razao_social = razao_social
         self.__cnpj = cnpj
         self.__itens = itens
@@ -27,6 +27,9 @@ class NotaFiscal:
         if len(detalhes) > 20:
             raise Exception('Detalhes da nota não podem ter mais de 20 caracteres')
         self.__detalhes = detalhes
+
+        for observador in observadores:
+            observador(self)
 
     @property
     def razao_social(self):
@@ -47,6 +50,7 @@ class NotaFiscal:
 
 if __name__ == '__main__':
     from criador_nota_fiscal import CriadorNotaFiscal
+    from observadores import imprimir, enviar_por_email, salvar_em_banco
 
     itens = [
         Item('Item A', 100),
@@ -57,12 +61,13 @@ if __name__ == '__main__':
         cnpj='FHSA Limitada',
         razao_social='0123456789',
         itens=itens,
+        observadores=[imprimir, enviar_por_email, salvar_em_banco]
     )
 
-    nfb = (
-        CriadorNotaFiscal()
-            .com_razao_social('FHSA Limitada')
-            .com_cnpj('0123456789')
-            .com_itens(itens)
-            .construir()
-    )
+    # nfb = (
+    #    CriadorNotaFiscal()
+    #        .com_razao_social('FHSA Limitada')
+    #        .com_cnpj('0123456789')
+    #        .com_itens(itens)
+    #        .construir()
+    # )
